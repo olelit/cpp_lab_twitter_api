@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from get_subsctibers import views
+
 urlpatterns = [
-    path('', include("get_subsctibers.urls")),
-    path('admin/', admin.site.urls),
+    path('user/', views.index),
+    path('user/<str:user_id>/<int:offset>/', views.index, name="list"),
+    path('user/<str:user_id>/', views.index, name="list"),
 ]
