@@ -1,9 +1,13 @@
 import math
 
+from django.views.generic import DetailView
+from django.views.generic.list import ListView
 from django.http import HttpResponse
 from django.shortcuts import render
 import get_subsctibers.VK_API as vk
 import requests
+
+from get_subsctibers.models import Subscriber, SubscriberSubscriber
 
 COUNT = 20
 
@@ -26,7 +30,6 @@ def index(request, user_id=vk.DEFAULT_ID, offset=0):
                                                                   offset, "photo_50")
     query = "https://api.vk.com/method/{0}?{1}&access_token={2}&v={3}".format("users.getFollowers", params, vk.TOKEN,
                                                                               vk.VERSION)
-    print(query)
     vk_response = requests.get(query)
 
     if vk_response.status_code == 200:
@@ -37,6 +40,30 @@ def index(request, user_id=vk.DEFAULT_ID, offset=0):
     next_offset = offset + COUNT
     pages = [i * COUNT for i in range(count)]
 
+    check_user = Subscriber.objects.filter(user_id=user['id'])
+
+    if not check_user:
+        main_user = Subscriber()
+        main_user.user_id = user['id']
+        main_user.name = user['first_name']
+        main_user.surname = user['last_name']
+        main_user.save()
+
+    for item in result:
+        check_user = Subscriber.objects.filter(user_id=item['id'])
+        if not check_user:
+            sub_user = Subscriber()
+            sub_user.user_id = item['id']
+            sub_user.name = item['first_name']
+            sub_user.surname = item['last_name']
+            sub_user.save()
+        check_user = SubscriberSubscriber.objects.filter(user_owner=user['id'], user_subsciber=item['id'])
+        if not check_user:
+            subscribe = SubscriberSubscriber()
+            subscribe.user_owner = Subscriber.objects.filter(user_id=user['id'])[0]
+            subscribe.user_subsciber = Subscriber.objects.filter(user_id=item['id'])[0]
+            subscribe.save()
+
     return render(request, 'index.html', {
         'result': result,
         'user': user,
@@ -45,3 +72,24 @@ def index(request, user_id=vk.DEFAULT_ID, offset=0):
         'pages': pages,
         'count': COUNT
     })
+
+
+class SubscribeDetailView(DetailView):
+    model = Subscriber
+    template_name = "archive_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        user = Subscriber.objects.filter(user_id=kwargs['id'])[0]
+        subscribers = SubscriberSubscriber.objects.filter(user_owner=user)
+
+        context = {
+            'user': user,
+            'subscribers': subscribers
+        }
+        return render(request, 'archive_detail.html', context)
+
+
+class SubscriberListView(ListView):
+    model = Subscriber
+    paginate_by = 20
+    template_name = "archive.html"

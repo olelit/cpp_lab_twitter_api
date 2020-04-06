@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="d-flex flex-column align-items-center">
+
+        <div class="d-flex align-items-center mt-3">
+            <div class="w-100 d-flex justify-content-end align-items-center mb-3 p-1">
+                <div class="d-flex flex-column">
+                    <span>Имя: {{ user.name }}</span>
+                    <span>Фамилия: {{ user.surname }}</span>
+                </div>
+            </div>
+        </div>
+        <div class="w-100 d-flex flex-column align-items-center mb-3 p-1 overflow-auto list">
+            {% if not subscribers %}
+                <h1>Нет записей</h1>
+            {% endif %}
+            {% for item in subscribers %}
+                <div class="row w-50 d-flex justify-content-center border rounded-lg align-items-center mb-1 p-1">
+                    <div class="w-50">
+                        <span>{{ item.user_subsciber.name }} {{ item.user_subsciber.surname }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {#        <nav>#}
+        {#            <ul class="pagination">#}
+        {#                {% if prev_offset >= 0 %}#}
+        {#                    <li class="page-item"><a class="page-link" href="{% url 'list'  user.id prev_offset %}"><<</a>#}
+        {#                {% endif %}#}
+        {##}
+        {#                </li>#}
+        {#                {% if next_offset <= count %}#}
+        {#                    <li class="page-item"><a class="page-link" href="{% url 'list'  user.id next_offset %}">>></a></li>#}
+        {#                {% endif %}#}
+        {#            </ul>#}
+        {#        </nav>#}
+
+    </div>
+
+{% endblock %}
+
+
+
+

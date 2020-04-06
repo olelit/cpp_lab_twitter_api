@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="d-flex flex-column align-items-center mt-2">
+        <div class="w-100 d-flex flex-column align-items-center mb-4 p-1 overflow-auto list archive">
+            {% if not page_obj %}
+                <h1>Нет записей</h1>
+            {% endif %}
+            {% for item in page_obj %}
+                <div class="row w-50 d-flex justify-content-center border rounded-lg align-items-center mb-1 p-1">
+                    <div class="w-50">
+                        <span>{{ item.name }} {{ item.surname }}</span>
+                    </div>
+                    <div>
+                        <a href="{% url 'archive_detail' item.user_id %}" class="btn btn-success">Перейти</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}"><<</a>
+                {% endif %}
+
+                </li>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">>></a>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+{% endblock %}
