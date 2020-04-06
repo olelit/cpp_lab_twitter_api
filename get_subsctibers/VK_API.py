@@ -1,3 +1,3 @@
-TOKEN = "1bcd4ee31bcd4ee31bcd4ee3261bbd827e11bcd1bcd4ee34544923ad40e5a9d2eb299d0"
+TOKEN = ""
 VERSION = "5.103"
 DEFAULT_ID = "1"
