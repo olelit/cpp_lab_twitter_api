@@ -20,6 +20,7 @@ from get_subsctibers import views
 from get_subsctibers.views import SubscriberListView, SubscribeDetailView
 
 urlpatterns = [
+    path('',views.index),
     path('user/', views.index),
     path('user/<str:user_id>/<int:offset>/', views.index, name="list"),
     path('user/<str:user_id>/', views.index, name="list"),
