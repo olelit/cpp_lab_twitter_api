@@ -32,9 +32,10 @@ def index(request, user_id=vk.DEFAULT_ID, offset=0):
                                                                               vk.VERSION)
     vk_response = requests.get(query)
 
-    if vk_response.status_code == 200:
+    if vk_response.status_code == 200 and 'response' in vk_response.json():
         result = vk_response.json()['response']['items']
         count = math.ceil(vk_response.json()['response']['count'] / COUNT)
+
 
     prev_offset = offset - COUNT
     next_offset = offset + COUNT
