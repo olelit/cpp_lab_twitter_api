@@ -25,7 +25,9 @@ SECRET_KEY = 'n@+)&qz!)=_ee1tcmqt)5^(x_ib5e3$19)&m6=owdh$mhq8)%y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'symbians60v5.pythonanywhere.com'
+]
 
 
 # Application definition
